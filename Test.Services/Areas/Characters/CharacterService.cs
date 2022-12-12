@@ -28,7 +28,7 @@ public class CharacterService : ICharacterService
         return Task.FromResult(characterDto);
     }
 
-    public async Task<bool> CheckAsync(CharacterDtoInput characterInput)
+    public Task<bool> CheckAsync(CharacterDtoInput characterInput)
     {
         var result = false;
 
@@ -40,17 +40,22 @@ public class CharacterService : ICharacterService
                 c => characterInput.CharacterName != null && c.Name.Contains(characterInput.CharacterName))
                     ?? throw new Exception($"Character with name: {characterInput.CharacterName} is not found!");
 
+        var episodes = Search
+            .GetAllEpisodesAsync()
+            .Result
+            .Results;
+
+        var ifCharacterExist = episodes
+            .FirstOrDefault(e => e.Name == characterInput.EpisodeName)
+                ?? throw new Exception($"Episode with name: {characterInput.EpisodeName} is not found!");
+
         foreach (var episode in character.Episodes)
         {
-            var episodeId = episode
-                .Split("/")
-                .Last();
+            var matchEpisode = episodes.FirstOrDefault(e => e.URL == episode);
 
-            var foundEpisode = await Search.GetEpisodeAsync(int.Parse(episodeId));
-
-            if (foundEpisode.Name == characterInput.EpisodeName) result = true;
+            if (matchEpisode?.Name == characterInput.EpisodeName) result = true;
         }
 
-        return result;
+        return Task.FromResult(result);
     }
 }
