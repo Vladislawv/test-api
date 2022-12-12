@@ -1,0 +1,9 @@
+services:
+  test-api-sql-server:
+    container_name: test-api-sql-server
+    image: mcr.microsoft.com/mssql/server:latest
+    ports:
+      - "1434:1434"
+    environment:
+      SA_PASSWORD: "Initial123!"
+      ACCEPT_EULA: "Y"
