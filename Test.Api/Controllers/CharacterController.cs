@@ -5,9 +5,6 @@ using Test.Services.Areas.Characters.Dto;
 
 namespace TestApi.Controllers;
 
-/// <summary>
-/// Controller to find data by characters info
-/// </summary>
 [ApiController]
 [Route("api/v1")]
 [Produces(MediaTypeNames.Application.Json)]

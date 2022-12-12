@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TestApi.Controllers;
 
-/// <summary>
-/// Ping controller
-/// </summary>
 [ApiController]
 [Produces(MediaTypeNames.Application.Json)]
 [Route("api/ping")]

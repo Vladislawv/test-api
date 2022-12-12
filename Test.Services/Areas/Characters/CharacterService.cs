@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Rick;
 using Test.Services.Areas.Characters.Dto;
+using Test.Services.Exceptions;
 
 namespace Test.Services.Areas.Characters;
 
@@ -21,7 +22,7 @@ public class CharacterService : ICharacterService
             .Results
             .FirstOrDefault(
                 c => characterInput.CharacterName != null && c.Name.Contains(characterInput.CharacterName))
-                    ?? throw new Exception($"Character with name: {characterInput.CharacterName} is not found!");
+                    ?? throw new NotFoundException($"Character with name: {characterInput.CharacterName} is not found!");
 
         var characterDto = _mapper.Map<CharacterDto>(character);
 
@@ -38,7 +39,7 @@ public class CharacterService : ICharacterService
             .Results
             .FirstOrDefault(
                 c => characterInput.CharacterName != null && c.Name.Contains(characterInput.CharacterName))
-                    ?? throw new Exception($"Character with name: {characterInput.CharacterName} is not found!");
+                    ?? throw new NotFoundException($"Character with name: {characterInput.CharacterName} is not found!");
 
         var episodes = Search
             .GetAllEpisodesAsync()
@@ -47,7 +48,7 @@ public class CharacterService : ICharacterService
 
         var ifCharacterExist = episodes
             .FirstOrDefault(e => e.Name == characterInput.EpisodeName)
-                ?? throw new Exception($"Episode with name: {characterInput.EpisodeName} is not found!");
+                ?? throw new NotFoundException($"Episode with name: {characterInput.EpisodeName} is not found!");
 
         foreach (var episode in character.Episodes)
         {
