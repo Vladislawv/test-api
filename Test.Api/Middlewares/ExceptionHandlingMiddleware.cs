@@ -1,6 +1,6 @@
-﻿using System.Net;
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using System.Text.Json;
+using Test.Services.Exceptions;
 using TestApi.Dto;
 
 namespace TestApi.Middlewares;
@@ -34,7 +34,11 @@ public class ExceptionHandlingMiddleware
         
         var response = context.Response;
         response.ContentType = MediaTypeNames.Application.Json;
-        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+        if (ex is CustomException customException)
+        {
+            response.StatusCode = (int)customException.ResponseStatusCode;
+        }
 
         var errorDto = new ErrorDto
         {
